@@ -3,7 +3,7 @@ import java.io.FileInputStream;
 public class Tests {
     public final double FIRST_UPPER_LIMIT = 50000.0;
 
-    public void firstTest(){
+    void firstTest(){
         try{
             test("./src/testingValues", 5000.0);
         }
@@ -12,9 +12,27 @@ public class Tests {
         }
     }
 
-    public void secondTest(){
+    void secondTest(){ //Fails, because of == constraint
+        try{
+            test("./src/testingValues2", 50000.0);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void thirdTest(){
         try{
             test("./src/testingValues3", 50000.0);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void fourthTest(){ //Fails, because of == constraint
+        try{
+            test("./src/testingValues4", 50000.0);
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -18,12 +18,6 @@ class ObjectiveFunction {
         coefficients[index] = value;
     }
 
-    void changeCoefficients() {
-        for(int i = 0; i < coefficients.length; i++) {
-            coefficients[i] = coefficients[i] * (-1);
-        }
-    }
-
     void setObjective(String objective) throws Exception {
         if(objective.equals("min") || objective.equals("max")) {
             this.objective = objective;

@@ -60,19 +60,6 @@ class TaskMaker {
         catch(Exception e) {
             e.printStackTrace();
         }
-        if(objectiveFunction.getObjective().equals("max")) {
-            changeObjective();
-            try {
-                objectiveFunction.setObjective("min");
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void changeObjective() {
-        objectiveFunction.changeCoefficients();
     }
 
     private void askForConstraintFunctions() {

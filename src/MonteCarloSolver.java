@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 100000;
-    private final double EPSILON = 0.001;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 1000000;
+    private final double EPSILON = 0.0001;
     private final double LIMIT_CHANGES = 0.2;
     private final int NUMBER_OF_THREADS = 4;
 
@@ -30,38 +30,47 @@ class MonteCarloSolver {
     }
 
     Double[] solve() {
-        Double[] values = findValuesThatMinimalizesObjective();
+        Double[] values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
         Double previousObjectiveFunctionValue = objectiveFunction.evaluate(values);
 
         changeLimits(values);
-        values = findValuesThatMinimalizesObjective();
+        values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
         Double currentObjectiveFunctionValue = objectiveFunction.evaluate(values);
 
         while( Math.abs(previousObjectiveFunctionValue - currentObjectiveFunctionValue) > EPSILON ) {
             previousObjectiveFunctionValue = currentObjectiveFunctionValue;
             changeLimits(values);
-            values = findValuesThatMinimalizesObjective();
+            values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
             currentObjectiveFunctionValue = objectiveFunction.evaluate(values);
         }
 
         return values;
     }
 
-    private Double[] findValuesThatMinimalizesObjective() {
+    private Double[] findValuesThatOptimalizesObjective(String objectiveStr) {
         ArrayList<Double[]> listOfValues = findRandomValuesThatFulfillsConstraints();
-        Double minimum = objectiveFunction.evaluate(listOfValues.get(0));
-        Double[] minimalizes = listOfValues.get(0);
+        Double optimum = objectiveFunction.evaluate(listOfValues.get(0));
+        Double[] optimalizes = listOfValues.get(0);
 
         for (Double[] values : listOfValues) {
             Double objective = objectiveFunction.evaluate(values);
-            if(objective < minimum){
-                minimalizes = values;
-                minimum = objective;
+            if(objectiveStr.equals("max")) {
+                if(objective > optimum){
+                    optimalizes = values;
+                    optimum = objective;
+                }
+            }
+            else if(objectiveStr.equals("min")) {
+                if(objective < optimum){
+                    optimalizes = values;
+                    optimum = objective;
+                }
             }
         }
 
-        return minimalizes;
+        return optimalizes;
     }
+
 
     private ArrayList<Double[]> findRandomValuesThatFulfillsConstraints() {
         RandomValuesGenerator randomGenerator = new RandomValuesGenerator(dimension, lowerLimitOfValues, upperLimitOfValues);
@@ -91,20 +100,6 @@ class MonteCarloSolver {
 
         return resultListOfRandomValues;
     }
-
-//    private boolean valuesFulfillsEveryConstraint(Double[] values) {
-//        for(ConstraintFunction function : constraintFunctions) {
-//            try{
-//                if(!function.valuesFulfillsFunction(values)) {
-//                    return false;
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     private void changeLimits(Double[] values) {
         Double newDistanceBetweenUpperAndLower = Math.abs(upperLimitOfValues[0] - lowerLimitOfValues[0]) * LIMIT_CHANGES;
