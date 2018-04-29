@@ -1,9 +1,9 @@
-public class ConstraintFunction {
+class ConstraintFunction {
     private Double[] coefficients;
     private String sign;
     private Double rightSideValue;
 
-    public ConstraintFunction(Integer numberOfDecisionVariables, String sign, Double rightSideValue) throws Exception {
+    ConstraintFunction(Integer numberOfDecisionVariables, String sign, Double rightSideValue) throws Exception {
         if (sign.equals("<=") || sign.equals("==") || sign.equals(">=") )
             this.sign = sign;
         else
@@ -12,11 +12,11 @@ public class ConstraintFunction {
         this.coefficients = new Double[numberOfDecisionVariables];
     }
 
-    public void setCoefficient(Integer index, Double value) {
+    void setCoefficient(Integer index, Double value) {
         coefficients[index] = value;
     }
 
-    public boolean valuesFulfillsFunction(Double[] values) throws Exception {
+    boolean valuesFulfillsFunction(Double[] values) throws Exception {
         if(values.length != coefficients.length)
             throw new Exception("Length of values and constrains are different");
         else {

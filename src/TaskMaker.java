@@ -2,25 +2,26 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class TaskMaker {
-    private final double FIRST_UPPER_LIMIT = 5000.0;
+class TaskMaker {
+    private final double FIRST_UPPER_LIMIT;
 
     private ArrayList<ConstraintFunction> constraintFunctions;
     private ObjectiveFunction objectiveFunction;
     private Integer dimension;
     private BufferedReader br;
 
-    public TaskMaker() {
+    TaskMaker(Double firstUpperLimit) {
         br = new BufferedReader(new InputStreamReader(System.in));
         constraintFunctions = new ArrayList<>();
+        this.FIRST_UPPER_LIMIT = firstUpperLimit;
     }
 
-    public Double[] solve() {
+    Double[] solve() {
         MonteCarloSolver solver = new MonteCarloSolver(constraintFunctions, objectiveFunction, dimension, FIRST_UPPER_LIMIT);
         return solver.solve();
     }
 
-    public void askForTask() {
+    void askForTask() {
         askForDimension();
         askForObjectiveFunction();
         askForConstraintFunctions();
@@ -107,5 +108,9 @@ public class TaskMaker {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    ObjectiveFunction getObjectiveFunction() {
+        return objectiveFunction;
     }
 }

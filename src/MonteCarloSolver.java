@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class MonteCarloSolver {
+class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 10000;
-    private final double EPSILON = 0.01;
-    private final double LIMIT_CHANGES = 0.1;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 10000000;
+    private final double EPSILON = 0.001;
+    private final double LIMIT_CHANGES = 0.2;
 
     private ArrayList<ConstraintFunction> constraintFunctions;
     private ObjectiveFunction objectiveFunction;
@@ -12,7 +12,7 @@ public class MonteCarloSolver {
     private Double[] upperLimitOfValues;
     private Double[] lowerLimitOfValues;
 
-    public MonteCarloSolver(
+    MonteCarloSolver(
             ArrayList<ConstraintFunction> constraintFunctions,
             ObjectiveFunction objectiveFunction,
             Integer dimension,
@@ -28,7 +28,7 @@ public class MonteCarloSolver {
         }
     }
 
-    public Double[] solve() {
+    Double[] solve() {
         Double[] values = findValuesThatMinimalizesObjective();
         Double previousObjectiveFunctionValue = objectiveFunction.evaluate(values);
 
