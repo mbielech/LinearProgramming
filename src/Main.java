@@ -8,7 +8,7 @@ public class Main {
         Double[] result = taskMaker.solve();
         for(Double value : result) {
             System.out.print(value);
-            System.out.print(" ");
+            System.out.print("  ");
         }
     }
 }
