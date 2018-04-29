@@ -2,9 +2,10 @@ import java.util.ArrayList;
 
 class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 10000000;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 100000;
     private final double EPSILON = 0.001;
     private final double LIMIT_CHANGES = 0.2;
+    private final int NUMBER_OF_THREADS = 4;
 
     private ArrayList<ConstraintFunction> constraintFunctions;
     private ObjectiveFunction objectiveFunction;
@@ -13,10 +14,10 @@ class MonteCarloSolver {
     private Double[] lowerLimitOfValues;
 
     MonteCarloSolver(
-            ArrayList<ConstraintFunction> constraintFunctions,
-            ObjectiveFunction objectiveFunction,
-            Integer dimension,
-            Double upperLimitOfValues) {
+                    ArrayList<ConstraintFunction> constraintFunctions,
+                    ObjectiveFunction objectiveFunction,
+                    Integer dimension,
+                    Double upperLimitOfValues) {
         this.constraintFunctions = constraintFunctions;
         this.objectiveFunction = objectiveFunction;
         this.dimension = dimension;
@@ -64,32 +65,46 @@ class MonteCarloSolver {
 
     private ArrayList<Double[]> findRandomValuesThatFulfillsConstraints() {
         RandomValuesGenerator randomGenerator = new RandomValuesGenerator(dimension, lowerLimitOfValues, upperLimitOfValues);
+        ArrayList<Double[]> resultListOfRandomValues = new ArrayList<>();
         ArrayList<Double[]> listOfRandomValues = new ArrayList<>();
 
         for(int i = 0; i < NUMBER_OF_SAMPLES_ON_ITERATION; i++) {
-            Double[] randomValues = randomGenerator.generate();
-
-            if(valuesFulfillsEveryConstraint(randomValues)) {
-                listOfRandomValues.add(randomValues);
-            }
+            listOfRandomValues.add(randomGenerator.generate());
         }
 
-        return listOfRandomValues;
-    }
-
-    private boolean valuesFulfillsEveryConstraint(Double[] values) {
-        for(ConstraintFunction function : constraintFunctions) {
-            try{
-                if(!function.valuesFulfillsFunction(values)) {
-                    return false;
-                }
-            } catch (Exception e) {
+        MonteCarloThread[] threads = new MonteCarloThread[NUMBER_OF_THREADS];
+        for(int i = 0; i < NUMBER_OF_THREADS; i++) {
+            threads[i] = new MonteCarloThread(listOfRandomValues,
+                    resultListOfRandomValues,
+                    constraintFunctions,
+                    i*NUMBER_OF_SAMPLES_ON_ITERATION/NUMBER_OF_THREADS,
+                    i*NUMBER_OF_SAMPLES_ON_ITERATION/NUMBER_OF_THREADS + NUMBER_OF_SAMPLES_ON_ITERATION/NUMBER_OF_THREADS);
+            threads[i].run();
+        }
+        for(int i = 0; i < NUMBER_OF_THREADS; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-                return false;
             }
         }
-        return true;
+
+        return resultListOfRandomValues;
     }
+
+//    private boolean valuesFulfillsEveryConstraint(Double[] values) {
+//        for(ConstraintFunction function : constraintFunctions) {
+//            try{
+//                if(!function.valuesFulfillsFunction(values)) {
+//                    return false;
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     private void changeLimits(Double[] values) {
         Double newDistanceBetweenUpperAndLower = Math.abs(upperLimitOfValues[0] - lowerLimitOfValues[0]) * LIMIT_CHANGES;
