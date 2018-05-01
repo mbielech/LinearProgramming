@@ -1,11 +1,11 @@
 import java.io.FileInputStream;
 
-public class Tests {
-    public final double FIRST_UPPER_LIMIT = 50000.0;
+class Tests {
+    private final double FIRST_UPPER_LIMIT = 2000000.0;
 
     void firstTest(){
         try{
-            test("./src/testingValues", 5000.0);
+            test("./src/testingValues");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -14,7 +14,7 @@ public class Tests {
 
     void secondTest(){ //Fails, because of == constraint
         try{
-            test("./src/testingValues2", 50000.0);
+            test("./src/testingValues2");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -23,7 +23,7 @@ public class Tests {
 
     void thirdTest(){
         try{
-            test("./src/testingValues3", 50000.0);
+            test("./src/testingValues3");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -32,17 +32,17 @@ public class Tests {
 
     void fourthTest(){ //Fails, because of == constraint
         try{
-            test("./src/testingValues4", 50000.0);
+            test("./src/testingValues4");
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void test(String file, Double firstUpperLimit) throws Exception {
+    private void test(String file) throws Exception {
         System.setIn(new FileInputStream(file));
 
-        TaskMaker taskMaker = new TaskMaker(firstUpperLimit);
+        TaskMaker taskMaker = new TaskMaker(FIRST_UPPER_LIMIT);
         taskMaker.askForTask();
         Double[] result = taskMaker.solve();
 
@@ -54,7 +54,7 @@ public class Tests {
         }
 
         Double objective = objectiveFunction.evaluate(result);
-        System.out.println("\nObjective Function:");
+        System.out.println("\n\nObjective Function:");
         System.out.println(objective);
     }
 }

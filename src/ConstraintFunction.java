@@ -25,6 +25,18 @@ class ConstraintFunction {
         }
     }
 
+    Double[] getCoefficients() {
+        return coefficients;
+    }
+
+    Double getRightSideValue() {
+        return rightSideValue;
+    }
+
+    String getSign() {
+        return sign;
+    }
+
     private Double evaluateLeftSide(Double[] values) {
         Double result = 0.0;
         for(int i = 0; i < coefficients.length; i++) {
