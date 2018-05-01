@@ -40,7 +40,7 @@ class TaskMaker {
 
     private void askForObjectiveFunction() {
         objectiveFunction = new ObjectiveFunction(dimension);
-        System.out.println("What is the objective function? \n");
+        System.out.println("\nWhat is the objective function?\n");
         for(int i = 0; i < dimension; i++) {
             System.out.println("Write coefficient of x" + (i+1) + " decision variable:");
             try {

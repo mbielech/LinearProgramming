@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 class RandomValuesGenerator {
@@ -11,7 +12,17 @@ class RandomValuesGenerator {
         this.upperLimitOfValues = upperLimitOfValues;
     }
 
-    Double[] generate() {
+    ArrayList<Double[]> generateNumberOfRandomValues(Integer number) {
+        ArrayList<Double[]> randomValues = new ArrayList<>();
+
+        for(int i = 0; i < number; i++) {
+            randomValues.add(generate());
+        }
+
+        return randomValues;
+    }
+
+    private Double[] generate() {
         Double[] result = new Double[dimension];
         Random random = new Random();
 

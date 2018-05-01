@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 10000;
-    private final double EPSILON = 0.00000000000001;
-    private final double LIMIT_CHANGES = 0.6;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 1000;
+    private final double EPSILON = 0.00000000001;
+    private final double LIMIT_CHANGES = 0.8;
     private final int NUMBER_OF_THREADS = 8;
 
     private ArrayList<ConstraintFunction> constraintFunctions;
@@ -51,18 +51,15 @@ class MonteCarloSolver {
 
     private Double[] findValuesThatOptimalizesObjective(String objectiveStr) {
         ArrayList<Double[]> listOfValues = findRandomValuesThatFulfillsConstraints();
-        return findOptimumValues(listOfValues,objectiveStr);
+        return findOptimumValuesByThreads(listOfValues,objectiveStr);
     }
 
 
     private ArrayList<Double[]> findRandomValuesThatFulfillsConstraints() {
         RandomValuesGenerator randomGenerator = new RandomValuesGenerator(dimension, lowerLimitOfValues, upperLimitOfValues);
         ArrayList<Double[]> resultListOfRandomValues = new ArrayList<>();
-        ArrayList<Double[]> listOfRandomValues = new ArrayList<>();
 
-        for(int i = 0; i < NUMBER_OF_SAMPLES_ON_ITERATION; i++) {
-            listOfRandomValues.add(randomGenerator.generate());
-        }
+        ArrayList<Double[]> listOfRandomValues = randomGenerator.generateNumberOfRandomValues(NUMBER_OF_SAMPLES_ON_ITERATION);
 
         MonteCarloThread[] threads = new MonteCarloThread[NUMBER_OF_THREADS];
         for(int i = 0; i < NUMBER_OF_THREADS; i++) {
@@ -84,13 +81,17 @@ class MonteCarloSolver {
 
         return resultListOfRandomValues;
     }
-    private Double[] findOptimumValues(ArrayList<Double[]> listOfValues, String objectiveStr) {
+    private Double[] findOptimumValuesByThreads(ArrayList<Double[]> listOfValues, String objectiveStr) {
         ArrayList<Double[]> listOfOptimumsForEveryThread = findOptimumValueForEveryThread(listOfValues, objectiveStr);
 
-        Double optimum = objectiveFunction.evaluate(listOfOptimumsForEveryThread.get(0));
-        Double[] optimalizes = listOfOptimumsForEveryThread.get(0);
+        return findOptimumValues(listOfOptimumsForEveryThread, objectiveStr);
+    }
 
-        for (Double[] values : listOfOptimumsForEveryThread) {
+    private Double[] findOptimumValues(ArrayList<Double[]> listOfValues, String objectiveStr) {
+        Double optimum = objectiveFunction.evaluate(listOfValues.get(0));
+        Double[] optimalizes = listOfValues.get(0);
+
+        for (Double[] values : listOfValues) {
             Double objective = objectiveFunction.evaluate(values);
             if(objectiveStr.equals("max")) {
                 if(objective > optimum){
