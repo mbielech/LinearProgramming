@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 1000;
-    private final double EPSILON = 0.00000000001;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 500;
+    private final double EPSILON = 0.000000001;
     private final double LIMIT_CHANGES = 0.8;
     private final int NUMBER_OF_THREADS = 8;
 
@@ -21,8 +21,10 @@ class MonteCarloSolver {
         this.constraintFunctions = constraintFunctions;
         this.objectiveFunction = objectiveFunction;
         this.dimension = dimension;
+
         this.upperLimitOfValues = new Double[dimension];
         this.lowerLimitOfValues = new Double[dimension];
+
         for(int i = 0; i < dimension; i++) {
             this.lowerLimitOfValues[i] = INITIAL_LOWER_LIMIT;
             this.upperLimitOfValues[i] = upperLimitOfValues;
@@ -62,8 +64,8 @@ class MonteCarloSolver {
         ArrayList<Double[]> listOfRandomValues = randomGenerator.generateNumberOfRandomValues(NUMBER_OF_SAMPLES_ON_ITERATION);
 
         MonteCarloThread[] threads = new MonteCarloThread[NUMBER_OF_THREADS];
+        Integer portionForOneThread = NUMBER_OF_SAMPLES_ON_ITERATION/NUMBER_OF_THREADS;
         for(int i = 0; i < NUMBER_OF_THREADS; i++) {
-            Integer portionForOneThread = NUMBER_OF_SAMPLES_ON_ITERATION/NUMBER_OF_THREADS;
             threads[i] = new MonteCarloThread(listOfRandomValues,
                     resultListOfRandomValues,
                     constraintFunctions,
@@ -140,7 +142,15 @@ class MonteCarloSolver {
         Double newDistanceBetweenUpperAndLower = Math.abs(upperLimitOfValues[0] - lowerLimitOfValues[0]) * LIMIT_CHANGES;
 
         for(int i = 0; i < dimension; i++) {
+            Double currentDistance = Math.abs(upperLimitOfValues[0] - lowerLimitOfValues[0]) * LIMIT_CHANGES;
+            if(currentDistance > newDistanceBetweenUpperAndLower) {
+                newDistanceBetweenUpperAndLower = currentDistance;
+            }
+        }
+
+        for(int i = 0; i < dimension; i++) {
             upperLimitOfValues[i] = values[i] + newDistanceBetweenUpperAndLower/2;
+
             if(values[i] - newDistanceBetweenUpperAndLower/2 < 0) {
                 lowerLimitOfValues[i] = 0.0;
             }
