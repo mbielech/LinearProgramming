@@ -9,12 +9,12 @@ public class MonteCarloOptimumThread extends Thread {
     private Integer indexStop;
 
     MonteCarloOptimumThread(
-                                    ArrayList<Double[]> listOfValues,
-                                    ArrayList<Double[]> resultListOfValues,
-                                    String objectiveStr,
-                                    ObjectiveFunction objectiveFunction,
-                                    Integer indexStart,
-                                    Integer indexStop) {
+                            ArrayList<Double[]> listOfValues,
+                            ArrayList<Double[]> resultListOfValues,
+                            String objectiveStr,
+                            ObjectiveFunction objectiveFunction,
+                            Integer indexStart,
+                            Integer indexStop) {
         this.listOfValues = listOfValues;
         this.resultListOfValues = resultListOfValues;
         this.objectiveStr = objectiveStr;

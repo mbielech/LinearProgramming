@@ -44,7 +44,12 @@ class Tests {
 
         TaskMaker taskMaker = new TaskMaker(FIRST_UPPER_LIMIT);
         taskMaker.askForTask();
+
+        long startTime = System.currentTimeMillis();
+
         Double[] result = taskMaker.solve();
+
+        long estimatedTime = System.currentTimeMillis() - startTime;
 
         ObjectiveFunction objectiveFunction = taskMaker.getObjectiveFunction();
         System.out.println("\nCoefficients:");
@@ -56,5 +61,9 @@ class Tests {
         Double objective = objectiveFunction.evaluate(result);
         System.out.println("\n\nObjective Function:");
         System.out.println(objective);
+
+        System.out.print("\nTime: ");
+        System.out.print(estimatedTime);
+        System.out.println(" milliseconds");
     }
 }

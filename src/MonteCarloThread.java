@@ -7,11 +7,12 @@ public class MonteCarloThread extends Thread {
     private Integer indexStart;
     private Integer indexStop;
 
-    MonteCarloThread(ArrayList<Double[]> randomValues,
-                     ArrayList<Double[]> resultListOfRandomValues,
-                     ArrayList<ConstraintFunction> constraintFunctions,
-                     Integer indexStart,
-                     Integer indexStop) {
+    MonteCarloThread(
+                    ArrayList<Double[]> randomValues,
+                    ArrayList<Double[]> resultListOfRandomValues,
+                    ArrayList<ConstraintFunction> constraintFunctions,
+                    Integer indexStart,
+                    Integer indexStop) {
         this.listOfRandomValues = randomValues;
         this.resultListOfRandomValues = resultListOfRandomValues;
         this.constraintFunctions = constraintFunctions;

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 class MonteCarloSolver {
     private final double INITIAL_LOWER_LIMIT = 0.0;
-    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 500;
+    private final int NUMBER_OF_SAMPLES_ON_ITERATION = 1000;
     private final double EPSILON = 0.000000001;
     private final double LIMIT_CHANGES = 0.8;
     private final int NUMBER_OF_THREADS = 8;
