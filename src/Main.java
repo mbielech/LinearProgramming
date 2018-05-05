@@ -1,7 +1,7 @@
-public class Main {
-    static final double FIRST_UPPER_LIMIT = 50000.0;
+class Main {
+    private static final double FIRST_UPPER_LIMIT = 50000.0;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         TaskMaker taskMaker = new TaskMaker(FIRST_UPPER_LIMIT);
         taskMaker.askForTask();
         Double[] result = taskMaker.solve();

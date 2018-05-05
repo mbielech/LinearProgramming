@@ -41,16 +41,17 @@ class ConstraintFunction {
         return result;
     }
 
-    private boolean checkBothSides(String sign, double left, double right) {
-        if( sign.equals("==")) {
-            return left == right;
+    private boolean checkBothSides(String sign, double left, double right) throws Exception {
+        switch (sign) {
+            case "==":
+                return left == right;
+            case ">=":
+                return left >= right;
+            case "<=":
+                return left <= right;
         }
-        else if( sign.equals(">=") ) {
-            return left >= right;
-        }
-        else {
-            return left <= right;
-        }
+
+        throw new Exception("Bad sign");
     }
 
 }

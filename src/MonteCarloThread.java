@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-public class MonteCarloThread extends Thread {
-    private ArrayList<Double[]> listOfRandomValues;
-    private ArrayList<Double[]> resultListOfRandomValues;
-    private ArrayList<ConstraintFunction> constraintFunctions;
-    private Integer indexStart;
-    private Integer indexStop;
+class MonteCarloThread extends Thread {
+    private final ArrayList<Double[]> listOfRandomValues;
+    private final ArrayList<Double[]> resultListOfRandomValues;
+    private final ArrayList<ConstraintFunction> constraintFunctions;
+    private final Integer indexStart;
+    private final Integer indexStop;
 
     MonteCarloThread(
                     ArrayList<Double[]> randomValues,

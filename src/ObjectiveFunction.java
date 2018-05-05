@@ -1,5 +1,5 @@
 class ObjectiveFunction {
-    private Double[] coefficients;
+    private final Double[] coefficients;
     private String objective;
 
     ObjectiveFunction(Integer numberOfDecisionVariables) {

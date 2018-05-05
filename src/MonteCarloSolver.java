@@ -7,11 +7,11 @@ class MonteCarloSolver {
     private final double LIMIT_CHANGES = 0.8;
     private final int NUMBER_OF_THREADS = 8;
 
-    private ArrayList<ConstraintFunction> constraintFunctions;
-    private ObjectiveFunction objectiveFunction;
-    private Integer dimension;
-    private Double[] upperLimitOfValues;
-    private Double[] lowerLimitOfValues;
+    private final ArrayList<ConstraintFunction> constraintFunctions;
+    private final ObjectiveFunction objectiveFunction;
+    private final Integer dimension;
+    private final Double[] upperLimitOfValues;
+    private final Double[] lowerLimitOfValues;
 
     MonteCarloSolver(
                     ArrayList<ConstraintFunction> constraintFunctions,
@@ -34,24 +34,24 @@ class MonteCarloSolver {
     Double[] solve() {
         tryToAdjustLimits();
 
-        Double[] values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
+        Double[] values = findValuesThatOptimizesObjective(objectiveFunction.getObjective());
         Double previousObjectiveFunctionValue = objectiveFunction.evaluate(values);
 
         changeLimits(values);
-        values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
+        values = findValuesThatOptimizesObjective(objectiveFunction.getObjective());
         Double currentObjectiveFunctionValue = objectiveFunction.evaluate(values);
 
         while( Math.abs(previousObjectiveFunctionValue - currentObjectiveFunctionValue) > EPSILON ) {
             previousObjectiveFunctionValue = currentObjectiveFunctionValue;
             changeLimits(values);
-            values = findValuesThatOptimalizesObjective(objectiveFunction.getObjective());
+            values = findValuesThatOptimizesObjective(objectiveFunction.getObjective());
             currentObjectiveFunctionValue = objectiveFunction.evaluate(values);
         }
 
         return values;
     }
 
-    private Double[] findValuesThatOptimalizesObjective(String objectiveStr) {
+    private Double[] findValuesThatOptimizesObjective(String objectiveStr) {
         ArrayList<Double[]> listOfValues = findRandomValuesThatFulfillsConstraints();
         return findOptimumValuesByThreads(listOfValues,objectiveStr);
     }
@@ -91,25 +91,25 @@ class MonteCarloSolver {
 
     private Double[] findOptimumValues(ArrayList<Double[]> listOfValues, String objectiveStr) {
         Double optimum = objectiveFunction.evaluate(listOfValues.get(0));
-        Double[] optimalizes = listOfValues.get(0);
+        Double[] optimizes = listOfValues.get(0);
 
         for (Double[] values : listOfValues) {
             Double objective = objectiveFunction.evaluate(values);
             if(objectiveStr.equals("max")) {
                 if(objective > optimum){
-                    optimalizes = values;
+                    optimizes = values;
                     optimum = objective;
                 }
             }
             else if(objectiveStr.equals("min")) {
                 if(objective < optimum){
-                    optimalizes = values;
+                    optimizes = values;
                     optimum = objective;
                 }
             }
         }
 
-        return optimalizes;
+        return optimizes;
     }
 
     private ArrayList<Double[]> findOptimumValueForEveryThread(ArrayList<Double[]> listOfValues, String objectiveStr) {

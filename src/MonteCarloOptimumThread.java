@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 
-public class MonteCarloOptimumThread extends Thread {
-    private ArrayList<Double[]> listOfValues;
-    private ArrayList<Double[]> resultListOfValues;
-    private String objectiveStr;
-    private ObjectiveFunction objectiveFunction;
-    private Integer indexStart;
-    private Integer indexStop;
+class MonteCarloOptimumThread extends Thread {
+    private final ArrayList<Double[]> listOfValues;
+    private final ArrayList<Double[]> resultListOfValues;
+    private final String objectiveStr;
+    private final ObjectiveFunction objectiveFunction;
+    private final Integer indexStart;
+    private final Integer indexStop;
 
     MonteCarloOptimumThread(
                             ArrayList<Double[]> listOfValues,
@@ -31,24 +31,24 @@ public class MonteCarloOptimumThread extends Thread {
 
     private void findOptimum() {
         Double optimum = objectiveFunction.evaluate(listOfValues.get(indexStart));
-        Double[] optimalizes = listOfValues.get(indexStart);
+        Double[] optimizes = listOfValues.get(indexStart);
 
         for (int i = indexStart; i < indexStop; i++) {
             Double objective = objectiveFunction.evaluate(listOfValues.get(i));
             if(objectiveStr.equals("max")) {
                 if(objective > optimum){
-                    optimalizes = listOfValues.get(i);
+                    optimizes = listOfValues.get(i);
                     optimum = objective;
                 }
             }
             else if(objectiveStr.equals("min")) {
                 if(objective < optimum){
-                    optimalizes = listOfValues.get(i);
+                    optimizes = listOfValues.get(i);
                     optimum = objective;
                 }
             }
         }
 
-        resultListOfValues.add(optimalizes);
+        resultListOfValues.add(optimizes);
     }
 }

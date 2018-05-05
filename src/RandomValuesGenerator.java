@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class RandomValuesGenerator {
-    private Integer dimension;
-    private Double[] upperLimitOfValues;
-    private Double[] lowerLimitOfValues;
+    private final Integer dimension;
+    private final Double[] upperLimitOfValues;
+    private final Double[] lowerLimitOfValues;
 
     RandomValuesGenerator(Integer dimension, Double[] lowerLimitOfValues, Double[] upperLimitOfValues) {
         this.dimension = dimension;

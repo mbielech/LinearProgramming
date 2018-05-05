@@ -5,10 +5,10 @@ import java.util.ArrayList;
 class TaskMaker {
     private final double FIRST_UPPER_LIMIT;
 
-    private ArrayList<ConstraintFunction> constraintFunctions;
+    private final ArrayList<ConstraintFunction> constraintFunctions;
     private ObjectiveFunction objectiveFunction;
     private Integer dimension;
-    private BufferedReader br;
+    private final BufferedReader br;
 
     TaskMaker(Double firstUpperLimit) {
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -51,11 +51,11 @@ class TaskMaker {
 
     private void parseObjectiveFunction() throws Exception {
         String in = br.readLine();
-        String[] splitted = in.split(" ");
+        String[] objectiveFunctionToParse = in.split(" ");
         for(int i = 0; i < dimension; i++) {
-            objectiveFunction.setCoefficient(i, Double.parseDouble(splitted[i]));
+            objectiveFunction.setCoefficient(i, Double.parseDouble(objectiveFunctionToParse[i]));
         }
-        objectiveFunction.setObjective(splitted[dimension]);
+        objectiveFunction.setObjective(objectiveFunctionToParse[dimension]);
     }
 
     private void askForConstraintFunctions() {
@@ -75,16 +75,16 @@ class TaskMaker {
 
     private void parseConstraintFunction() throws Exception {
         String in = br.readLine();
-        String[] splitted = in.split(" ");
+        String[] constraintFunctionToParse = in.split(" ");
 
         Double[] coefficients = new Double[dimension];
         for(int i = 0; i < dimension; i++) {
-            coefficients[i] = Double.parseDouble(splitted[i]);
+            coefficients[i] = Double.parseDouble(constraintFunctionToParse[i]);
         }
 
-        String sign = splitted[dimension];
+        String sign = constraintFunctionToParse[dimension];
 
-        Double rightSideValue = Double.parseDouble(splitted[dimension+1]);
+        Double rightSideValue = Double.parseDouble(constraintFunctionToParse[dimension+1]);
 
         ConstraintFunction constraintFunction = new ConstraintFunction(coefficients, sign, rightSideValue);
         constraintFunctions.add(constraintFunction);
