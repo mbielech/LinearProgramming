@@ -3,17 +3,13 @@ class ConstraintFunction {
     private String sign;
     private Double rightSideValue;
 
-    ConstraintFunction(Integer numberOfDecisionVariables, String sign, Double rightSideValue) throws Exception {
+    ConstraintFunction(Double[] coefficients, String sign, Double rightSideValue) throws Exception {
         if (sign.equals("<=") || sign.equals("==") || sign.equals(">=") )
             this.sign = sign;
         else
             throw new Exception("Bad sign of ConstraintFunction");
         this.rightSideValue = rightSideValue;
-        this.coefficients = new Double[numberOfDecisionVariables];
-    }
-
-    void setCoefficient(Integer index, Double value) {
-        coefficients[index] = value;
+        this.coefficients = coefficients;
     }
 
     boolean valuesFulfillsFunction(Double[] values) throws Exception {

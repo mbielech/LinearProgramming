@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ class TaskMaker {
     }
 
     private void askForDimension() {
-        System.out.println("What is the dimension of problem (number of decision variables)?: ");
+        System.out.println("What is the dimension of problem (number of decision variables)?");
         try {
             String in = br.readLine();
             dimension = Integer.parseInt(in);
@@ -40,61 +41,54 @@ class TaskMaker {
 
     private void askForObjectiveFunction() {
         objectiveFunction = new ObjectiveFunction(dimension);
-        System.out.println("\nWhat is the objective function?\n");
-        for(int i = 0; i < dimension; i++) {
-            System.out.println("Write coefficient of x" + (i+1) + " decision variable:");
-            try {
-                String in = br.readLine();
-
-                objectiveFunction.setCoefficient(i,Double.parseDouble(in));
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("What is the objective: minimalization or maximalization (write min or max):");
+        System.out.println("\nWhat is the objective function?");
         try {
-            String in = br.readLine();
-            objectiveFunction.setObjective(in);
+            parseObjectiveFunction();
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void parseObjectiveFunction() throws Exception {
+        String in = br.readLine();
+        String[] splitted = in.split(" ");
+        for(int i = 0; i < dimension; i++) {
+            objectiveFunction.setCoefficient(i, Double.parseDouble(splitted[i]));
+        }
+        objectiveFunction.setObjective(splitted[dimension]);
+    }
+
     private void askForConstraintFunctions() {
+
         try {
-            while (true) {
-                System.out.println("\nWhat is the constraint function? \n");
-                System.out.println("What is the sign of constraint function (write <=, ++ or >=):");
-                String sign;
-                sign = br.readLine();
-
-                System.out.println("What is the right side value of constraint function:");
-                Double rightSideValue;
-                String in = br.readLine();
-                rightSideValue = Double.parseDouble(in);
-
-                ConstraintFunction constraintFunction = new ConstraintFunction(dimension, sign, rightSideValue);
-
-                for(int i = 0; i < dimension; i++) {
-                    System.out.println("Write coefficient of x" + (i+1) + " decision variable:");
-                    in = br.readLine();
-                    constraintFunction.setCoefficient(i,Double.parseDouble(in));
-                }
-
-                constraintFunctions.add(constraintFunction);
-
-                System.out.println("Would you like to add another constraint function? (y or n)");
-                in = br.readLine();
-                if(in.equals("n") || in.equals("N") || in.equals("No") || in.equals("no") || in.equals("NO")) {
-                    break;
-                }
+            System.out.println("\nHow many constraint functions?");
+            String in = br.readLine();
+            for(int i = 0; i < Integer.parseInt(in); i++) {
+                System.out.println("\nWhat is the constraint function?");
+                parseConstraintFunction();
             }
         }
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void parseConstraintFunction() throws Exception {
+        String in = br.readLine();
+        String[] splitted = in.split(" ");
+
+        Double[] coefficients = new Double[dimension];
+        for(int i = 0; i < dimension; i++) {
+            coefficients[i] = Double.parseDouble(splitted[i]);
+        }
+
+        String sign = splitted[dimension];
+
+        Double rightSideValue = Double.parseDouble(splitted[dimension+1]);
+
+        ConstraintFunction constraintFunction = new ConstraintFunction(coefficients, sign, rightSideValue);
+        constraintFunctions.add(constraintFunction);
     }
 
     ObjectiveFunction getObjectiveFunction() {
